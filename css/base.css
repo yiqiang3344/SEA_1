@@ -1,9 +1,12 @@
 @charset "utf-8";
-body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, form, fieldset, input, textarea, p, blockquote, th, td, center, header, menu , dl, dt, dd, ul, ol, li{ margin: 0; padding: 0; }
-h1, h2, h3, h4, h5, h6 { font-size:100%;font-weight: normal; }
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, form, fieldset, input, textarea, p, blockquote, th, td, header, menu { margin: 0; padding: 0; }
+body{font-size: 13px;}
+h1, h2, h3, h4, h5, h6 { font-size:1em;font-weight: normal; }
+s{text-decoration: none;}
+ul{list-style-type: none;}
 body { 
 	height: 100%;
-	background: transparent;
+	background: #eee;
 	position: relative;
 	-webkit-text-size-adjust: none;
  	-webkit-user-select: none;
@@ -17,3 +20,8 @@ body {
 .fh16 { font-size: 16px; line-height: 18px }
 .fh18 { font-size: 18px; line-height: 21px }
 .fh20 { font-size: 20px; line-height: 23px }
+.m0a { margin:0 auto; }
+.msa { margin:10px auto;}
+.mma { margin:20px auto;}
+.mha { margin:40px auto;}
+.ac { text-align:center; }

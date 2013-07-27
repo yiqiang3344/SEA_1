@@ -37,7 +37,10 @@ if(!isset($_SERVER['PATH_INFO'])){
 $path = explode('/', strtolower($_SERVER['PATH_INFO']));//路径全小写处理
 
 if(isset($path[1]) && !empty($path[1])){//防止多余/时报错
-	require(Yi::app()->rootDir.'/controller/'.$path[1].'Controller.php');
+	if(!is_file($c = Yi::app()->rootDir.'/controller/'.$path[1].'Controller.php')){
+		Yi::app()->gotoView();
+	}
+	require($c);
 	$C_name = ucwords($path[1]).'Controller';
 	$C = new $C_name;//首字母大写
 }else{
@@ -45,7 +48,11 @@ if(isset($path[1]) && !empty($path[1])){//防止多余/时报错
 }
 
 if(isset($path[2]) && !empty($path[2])){
-	$C->{'action'.ucwords($path[2])}();//方法首字母都要大写
+	$a = 'action'.ucwords($path[2]);//方法首字母都要大写
+	if(!method_exists($C,$a)){
+		Yi::app()->gotoView();
+	}
+	$C->$a();
 }else{
 	Yi::app()->gotoView('main/index');
 }

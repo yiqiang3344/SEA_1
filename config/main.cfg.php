@@ -1,5 +1,6 @@
 <?php
 return array(
+	'webName'=>'易框架',
 	'errorView'=>'main/main',
 	'reloadDirs'=>array(
 		Yi::app()->rootDir.'/components',

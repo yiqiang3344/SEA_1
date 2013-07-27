@@ -3,7 +3,7 @@ class MainController extends Controller{
 
     public function actionMain(){
         $info = MUser::getBlog();
-        $img = Yi::app()->url('img/1.jpg');
+        $img = Yi::app()->url('images/1.jpg');
         //end
         $view = 'main';
         $bind = array();
@@ -12,26 +12,26 @@ class MainController extends Controller{
         $this->render($view,$bind);
     }
 
-    public function actionAddBlog(){
-        MUser::addBlog();
-        $info = '添加成功';
-        //end
-        $view = 'main';
-        $bind = array();
-        $bind['info'] = $info;
-        $this->render($view,$bind);
-    }
+    // public function actionAddBlog(){
+    //     MUser::addBlog();
+    //     $info = '添加成功';
+    //     //end
+    //     $view = 'add-blog';
+    //     $bind = array();
+    //     $bind['info'] = $info;
+    //     $this->render($view,$bind);
+    // }
 
-    public function actionMemcache(){
-        $cache = YCache::getInstance();
-        $cache->flush();
-        $info = '操作成功';
-        //end
-        $view = 'main';
-        $bind = array();
-        $bind['info'] = $info;
-        $this->render($view,$bind);
-    }
+    // public function actionMemcache(){
+    //     $cache = YCache::getInstance();
+    //     $cache->flush();
+    //     $info = '操作成功';
+    //     //end
+    //     $view = 'main';
+    //     $bind = array();
+    //     $bind['info'] = $info;
+    //     $this->render($view,$bind);
+    // }
 
     public function actionMustache(){
         $list = array(1,2,3,4);

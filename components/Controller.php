@@ -1,8 +1,10 @@
 <?php
 class Controller{
     public $layout = '//layouts/main';
+    public $pageTitle;
 
     public function __construct(){
+        $this->pageTile = Yi::app()->config['webName'];
         $this->init();
     }
 

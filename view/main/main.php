@@ -1,19 +1,20 @@
 <script type="text/javascript">
 	function print(){
 		var html = '';
+		html+='<ul class="mblogs">';
 		$.each(info,function(k,v){
-			html += '<div>';
-			$.each(v,function(k1,v1){
-				html += k1+':'+v1+',';
-			});
-			html += '</div>';
+			html+='	<li>';
+			html+='		<p class="title">'+v.title+'</p>';
+			html+='		<p class="meta">'+dateFormat(v.record_time)+'</p>';
+			html+='		<p class="summary">'+v.content+'</p>';
+			html+='		<p class="more"><s class="more--s">阅读全文>></s></p>';
+			html+='	</li>';
 		});
-		html += '<img src="'+img+'"/>';
+		html+='</ul>';
 		document.write(html);
 	}
 </script>
 <script type="text/javascript">
 	var info = <?=json_encode($info)?>;
-	var img = <?=json_encode($img)?>;
 	print();
 </script>

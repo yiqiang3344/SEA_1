@@ -56,3 +56,16 @@ var EventUtil = {
         else event.cancelBubble = true
     }
 };
+
+function dateFormat(time,flag){
+    var date = new Date(time*1000);
+    var ret = '';
+    if(!flag || flag==1){
+        ret += date.getFullYear();
+        ret += '-';
+        ret += date.getMonth()+1;
+        ret += '-';
+        ret += date.getDate();
+    }
+    return ret;
+}

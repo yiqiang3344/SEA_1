@@ -1,4 +1,12 @@
 <?php
+function setDbConfig(){
+    define('SAE_MYSQL_HOST_M', 'localhost');
+    define('SAE_MYSQL_PORT', '3306');
+    define('SAE_MYSQL_DB', 'sae_1');
+    define('SAE_MYSQL_USER', 'root');
+    define('SAE_MYSQL_PASS', 'yjq');
+}
+
 function getTime($refresh = false) {
 	$add_time = 24*60*60*0 + 60*60*0 + 60*0;
 	return Yi::app()->time($refresh,$add_time);
