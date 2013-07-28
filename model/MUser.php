@@ -1,9 +1,16 @@
 <?php
 class MUser
 {
-	public static function getBlog(){
+	public static function getBlogList(){
 		$db = getDbh();
-		return $db->select('select * from blog');
+		return $db->select('select * from blog order by id desc limit 10');
+	}
+
+	public static function getBlog($id){
+		$db = getDbh();
+		return $db->selectRow('select * from blog where id=:id',array(
+			':id'=>$id
+		));
 	}
 
 	public static function addBlog(){

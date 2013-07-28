@@ -2,13 +2,23 @@
 class MainController extends Controller{
 
     public function actionMain(){
-        $info = MUser::getBlog();
+        $info = MUser::getBlogList();
         $img = Yi::app()->url('images/1.jpg');
         //end
         $view = 'main';
         $bind = array();
         $bind['info'] = $info;
         $bind['img'] = $img;
+        $this->render($view,$bind);
+    }
+
+    public function actionBlog(){
+        $id = $_GET['id'];
+        $info = MUser::getBlog($id);
+        //end
+        $view = 'blog';
+        $bind = array();
+        $bind['info'] = $info;
         $this->render($view,$bind);
     }
 

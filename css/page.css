@@ -30,34 +30,52 @@
 	text-shadow: 1px 1px 0 #CCC, 2px 2px 0 #CCC, 3px 3px 0 #443, 3px 3px 0 #444, 4px 4px 0 #444, 4px 4px 0 #444;
 }
 
-.mblogs{
-}
-.mblogs .title{
-	font-size: 1.2em;
+.title{
 	font-weight: bold;
-	line-height: 1.8em;
 }
-.mblogs .meta{
+
+.meta{
 	font-size: 1em;
 	color:#666;
 	line-height: 1.8em;
 }
-.mblogs .summary{
-	font-size: 1em;
+
+.ellipsis{
 	word-break:break-all;
 	white-space:nowrap;
 	overflow:hidden; 
 	text-overflow:ellipsis;
 }
-.mblogs .more{
+
+.more{
 	text-align: right;
 	font-size: 0.8em;
 	line-height: 1.8em;
 }
-.mblogs .more--s{
+.more--s{
 	cursor: pointer;
 	color:#0099cc;
 }
-.mblogs .more--s:hover{
+.more--s:hover{
 	color:#b30000;
+}
+
+.mblogs .title{
+	font-size: 1.2em;
+	line-height: 1.8em;
+	cursor: pointer;
+}
+.mblogs .title:hover{
+	color:#b30000;
+}
+.mblogs .summary{
+	font-size: 1em;
+}
+
+.mblog .title{
+	cursor: auto;
+	font-size: 2em;
+}
+.mblog .content{
+	font-size: 1.2em;
 }

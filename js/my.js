@@ -69,3 +69,28 @@ function dateFormat(time,flag){
     }
     return ret;
 }
+
+function time(){
+    return STIME+(new Date().getTime()-CTIME)/1000;
+}
+
+function getUrl(c,a,p){
+    var ret;
+    if(a){
+        ret = BASEURI+'/'+c+'/'+a+'?';
+        if(p){
+            for(var k in p){
+                ret += encodeURIComponent(k)+'='+encodeURIComponent(p[k])+'&';
+            }
+        }
+    }else{
+        ret = BASEURI+'/'+c;
+    }
+    return ret;
+}
+
+var State = {
+    forward:function(c,a,p){
+        location.href = getUrl(c,a,p);
+    }
+}

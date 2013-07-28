@@ -24,4 +24,35 @@ body {
 .msa { margin:10px auto;}
 .mma { margin:20px auto;}
 .mha { margin:40px auto;}
+.ms { margin:10px;}
+.mm { margin:20px;}
+.mh { margin:40px;}
+.mts { margin-top:10px;}
+.mtm { margin-top:20px;}
+.mth { margin-top:40px;}
+.mrs { margin-right:10px;}
+.mrm { margin-right:20px;}
+.mrh { margin-right:40px;}
+.mbs { margin-bottom:10px;}
+.mbm { margin-bottom:20px;}
+.mbh { margin-bottom:40px;}
+.mls { margin-left:10px;}
+.mlm { margin-left:20px;}
+.mlh { margin-left:40px;}
+.ps { margin:10px;}
+.pm { margin:20px;}
+.ph { margin:40px;}
+.pts { margin-top:10px;}
+.ptm { margin-top:20px;}
+.pth { margin-top:40px;}
+.prs { margin-right:10px;}
+.prm { margin-right:20px;}
+.prh { margin-right:40px;}
+.pbs { margin-bottom:10px;}
+.pbm { margin-bottom:20px;}
+.pbh { margin-bottom:40px;}
+.pls { margin-left:10px;}
+.plm { margin-left:20px;}
+.plh { margin-left:40px;}
 .ac { text-align:center; }
+.ar { text-align:right; }

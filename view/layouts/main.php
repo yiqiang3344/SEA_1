@@ -7,6 +7,12 @@
 	<title><?=$this->pageTile?></title>
 	<script src="../../js/jquery-1.9.0.min.js" type="text/javascript"></script>
 	<script src="../../js/my.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		var STIME = <?=getTime();?>;
+		var CTIME = new Date().getTime();
+		var BASEURL = <?=json_encode(Yi::app()->baseUrl)?>;
+		var BASEURI = <?=json_encode(Yi::app()->baseUri)?>;
+	</script>
 </head>
 <body>
 	<div class="pw m0a head">
