@@ -12,7 +12,8 @@
 	height:120px;
 }
 .head h1{
-	margin: 35px 125px;
+	cursor: pointer;
+	margin: 35px 125px 0 125px;
 	font-family: "League-Gothic", Courier;
 	font-size: 6.3em;
 	text-transform: uppercase;

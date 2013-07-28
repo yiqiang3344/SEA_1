@@ -2,8 +2,9 @@
 body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, form, fieldset, input, textarea, p, blockquote, th, td, header, menu { margin: 0; padding: 0; }
 body{font-size: 13px;}
 h1, h2, h3, h4, h5, h6 { font-size:1em;font-weight: normal; }
-s{text-decoration: none;}
 ul{list-style-type: none;}
+a,s{text-decoration: none;}
+a:hover{color:#b30000;}
 body { 
 	height: 100%;
 	background: #eee;
@@ -11,6 +12,7 @@ body {
 	-webkit-text-size-adjust: none;
  	-webkit-user-select: none;
  }
+ .dn{display: none;}
 .fh10 { font-size: 10px; line-height: 11px }
 .fh11 { font-size: 11px; line-height: 13px }
 .fh12 { font-size: 12px; line-height: 14px }
@@ -56,3 +58,5 @@ body {
 .plh { margin-left:40px;}
 .ac { text-align:center; }
 .ar { text-align:right; }
+.wfull{width:100%;}
+.h150{height:150px;}

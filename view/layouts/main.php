@@ -12,11 +12,19 @@
 		var CTIME = new Date().getTime();
 		var BASEURL = <?=json_encode(Yi::app()->baseUrl)?>;
 		var BASEURI = <?=json_encode(Yi::app()->baseUri)?>;
+		$(function(){
+			$('.jsto_home').click(function(){
+				State.forward('Main','Main');
+			});
+		});
 	</script>
 </head>
 <body>
 	<div class="pw m0a head">
-		<h1>sidney</h1>
+		<h1 class="jsto_home">sidney</h1>
+		<div>
+			<a href="<?=Yi::app()->url('Main','Tools')?>">web开发工具</a>
+		</div>
 	</div>
 	<div id="maindiv" class="pw m0a page">
 		<?=$content?>

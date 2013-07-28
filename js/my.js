@@ -66,12 +66,24 @@ function dateFormat(time,flag){
         ret += date.getMonth()+1;
         ret += '-';
         ret += date.getDate();
+    }else if(flag==2){
+        ret += date.getFullYear();
+        ret += '-';
+        ret += date.getMonth()+1;
+        ret += '-';
+        ret += date.getDate();
+        ret += ' ';
+        ret += date.getHours();
+        ret += ':';
+        ret += date.getMinutes();
+        ret += ':';
+        ret += date.getSeconds();
     }
     return ret;
 }
 
 function time(){
-    return STIME+(new Date().getTime()-CTIME)/1000;
+    return Math.floor(STIME+(new Date().getTime()-CTIME)/1000);
 }
 
 function getUrl(c,a,p){

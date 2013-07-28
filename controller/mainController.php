@@ -22,6 +22,13 @@ class MainController extends Controller{
         $this->render($view,$bind);
     }
 
+    public function actionTools(){
+        //end
+        $view = 'tools';
+        $bind = array();
+        $this->render($view,$bind);   
+    }
+
     // public function actionAddBlog(){
     //     MUser::addBlog();
     //     $info = '添加成功';
