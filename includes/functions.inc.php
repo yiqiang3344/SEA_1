@@ -1,4 +1,13 @@
 <?php
+function yDie($m){
+    if(APP_DEBUG){
+        throw new YException($m);
+    }else{
+        Yi::app()->gotoView();
+    }
+    die();
+}
+
 function setDbConfig(){
     define('SAE_MYSQL_HOST_M', 'localhost');
     define('SAE_MYSQL_PORT', '3306');
@@ -142,42 +151,63 @@ function FUE($hash,$times) {
 	return $hash;
 }
 
+//排除转义的符号
+function noEscapeStrPos($string,$find,$start){
+    if(($pos = strpos($string,$find,$start)) !== false  && substr($string, $pos-1,1)=='\\'){
+        $func = __METHOD__;
+        $pos = $func($string, $find, $pos+strlen($find));
+    }
+    return $pos;
+}
+
 function strToArr($str){
     $pushByKey = function($str,$s_pos,$i,&$arr,&$key,$v=false){
+        $v = $v?$v:substr($str, $s_pos, $i-$s_pos);
+        if(is_string($v) && (strpos($v,'\'')===0 || strpos($v,'"')===0)){
+            $v = substr($v, 1, strlen($v)-2);
+        }
         if($key){
             if(strpos($key,'\'')===0 || strpos($key,'"')===0){
                 $key = substr($key, 1, strlen($key)-2);
             }
-            $arr[$key] = $v?$v:substr($str, $s_pos, $i-$s_pos);
+            $arr[$key] = $v;
             $key = false;
         }else{
-            $arr[] = $v?$v:substr($str, $s_pos, $i-$s_pos);
+            $arr[] = $v;
         }
     };
 
     $str = str_replace(array("\n","\r\n","\t"," "), '', $str);
-    if(strpos($str,'array(')!==0){
+    $ass = 'array(';
+    if(strpos($str,$ass)!==0){
         return array(null);//非数组则返回空值
     }
     $arr = array();
     $key = false;
-    $s_pos = 6;
+    $s_pos = strlen($ass);
     for($i=$s_pos,$c=strlen($str);$i<$c;$i++){
         if($str[$i]=='"'){
-            $i += strpos(substr($str, $i+1),'"')+1;
+            if(($i=noEscapeStrPos($str,'"',$i+1)) === false){
+                return array(null,null);
+            }
         }elseif($str[$i]=='\''){
-            $i += strpos(substr($str, $i+1),'\'')+1;
+            if(($i=noEscapeStrPos($str,'\'',$i+1)) === false){
+                return array(null,null);
+            }
         }elseif(substr($str, $i, 2)=='=>'){
             $key = substr($str, $s_pos, $i-$s_pos);
             $i += 1;
             $s_pos = $i+1;
-        }elseif(substr($str, $i, 6)=='array('){
+        }elseif(substr($str, $i, 6)==$ass){
             list($aa,$ii) = strToArr(substr($str, $i));
+            if($aa===null){
+                return array(null,null);
+            }
             $pushByKey($str,$s_pos,$i,$arr,$key,$aa);
             $i += $ii;
             $s_pos = $i+1;
         }elseif($str[$i]==','){
-                $pushByKey($str,$s_pos,$i,$arr,$key);
+            $pushByKey($str,$s_pos,$i,$arr,$key);
             $s_pos = $i+1;
         }elseif($str[$i]==')'){
             if($s_pos<$i){
@@ -186,4 +216,5 @@ function strToArr($str){
             return array($arr,$i);
         }
     }
+    return array(null,null);
 }

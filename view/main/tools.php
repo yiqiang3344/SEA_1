@@ -7,6 +7,7 @@
 </div>
 <div>
 	<span><input id="clear_source" type="button" value="还原"></span>
+	<span><input id="swap" type="button" value="互换"></span>
 	<span><input id="date_format" type="button" value="日期格式化"></span>
 	<span><input id="execute_js" type="button" value="执行js"></span>
 	<span><input id="execute_html" type="button" value="执行html"></span>
@@ -28,6 +29,7 @@
 		</select>
 		<input id="encrypt" type="button" value="执行">
 	</span>
+	<span><input id="format_css" type="button" value="css格式化"></span>
 </div>
 <div id="output_html" class="dn">
 </div>
@@ -59,6 +61,13 @@
 			output_html.hide();
 			output.show().val(ret);
 		}
+	});
+	$('#swap').click(function(){
+		var s_val = source.val();
+		output_html.hide()
+		source.val(output.val());
+		output.show().val(s_val);
+		return;
 	});
 	$('#execute_html').click(function(){
 		var s = document.getElementById("source");
