@@ -37,15 +37,23 @@
 	<textarea id="output" class="wfull h150"></textarea>
 </div>
 <script type="text/javascript">
+	$('#format_css').click(function(){
+		var s_val = source.val();
+		yajax('AjaxMain','Format',{type:'css',source:source.val()},function(obj){
+			if(obj.code==1){
+				output_html.hide();
+				output.show().val(obj.ret);
+			}
+		},this);
+	});
 	$('#encrypt').click(function(){
 		var type = $('#encrypt_type').val();
 		var ret;
 		if(type in {md5:1,base64_encode:1,base64_decode:1,addslashes:1,stripslashes:1,htmlentities:1,html_entity_decode:1,json_encode:1,json_decode:1}){
 			yajax('AjaxMain','Encrypt',{type:type,source:source.val()},function(obj){
 				if(obj.code==1){
-					ret = obj.ret;
 					output_html.hide();
-					output.show().val(ret);
+					output.show().val(obj.ret);
 				}
 			},this);
 		}else{

@@ -188,11 +188,11 @@ function strToArr($str){
     for($i=$s_pos,$c=strlen($str);$i<$c;$i++){
         if($str[$i]=='"'){
             if(($i=noEscapeStrPos($str,'"',$i+1)) === false){
-                return array(null,null);
+                break;
             }
         }elseif($str[$i]=='\''){
             if(($i=noEscapeStrPos($str,'\'',$i+1)) === false){
-                return array(null,null);
+                break;
             }
         }elseif(substr($str, $i, 2)=='=>'){
             $key = substr($str, $s_pos, $i-$s_pos);
@@ -201,7 +201,7 @@ function strToArr($str){
         }elseif(substr($str, $i, 6)==$ass){
             list($aa,$ii) = strToArr(substr($str, $i));
             if($aa===null){
-                return array(null,null);
+                break;
             }
             $pushByKey($str,$s_pos,$i,$arr,$key,$aa);
             $i += $ii;
@@ -210,11 +210,75 @@ function strToArr($str){
             $pushByKey($str,$s_pos,$i,$arr,$key);
             $s_pos = $i+1;
         }elseif($str[$i]==')'){
-            if($s_pos<$i){
-                $pushByKey($str,$s_pos,$i,$arr,$key);
-            }
+            $pushByKey($str,$s_pos,$i,$arr,$key);
             return array($arr,$i);
         }
     }
     return array(null,null);
+}
+
+
+//暂时不能很好的处理不以;结尾的，注释的换行，以及样式{}与{}之间的换行
+function formatCss($str){
+    function indent($counts){
+        return implode(array_pad(array(), 4*$counts, ' '),'');
+    }
+
+    function dealOne($str,$indentation=1){
+        $blank = indent($indentation);
+        $str = "\r\n".$blank.ltrim($str);
+        for($i=0,$c=strlen($str);$i<$c;$i++){
+            if($str[$i]=='{'){
+                $func = __METHOD__;
+                list($r,$l) = $func(substr($str,$i+1),$indentation+1);
+                if(!$r){
+                    break;
+                }
+                $str = substr($str, 0, $i+1).$r;
+                $c=strlen($str);
+                $i+=$l;
+            }elseif($str[$i]==':' || $str[$i]==','){
+                $str = substr($str, 0, $i+1).' '.ltrim(substr($str, $i+1));
+                $c=strlen($str);
+            }elseif(substr($str, $i, 2)=='/*'){
+                $i = strpos($str, '*/', $i+2);
+            }elseif($str[$i]==';'){
+                $s = substr($str, 0, $i+1);
+                $s1 = ltrim(substr($str, $i+1));
+                if(substr($s1, 0, 1)=='}'){
+                    $str = $s."\r\n".indent($indentation-1).$s1;
+                }else{
+                    $str = $s."\r\n".$blank.$s1;
+                }
+                $c=strlen($str);
+            }elseif($str[$i]=='}'){
+                $s = substr($str, 0, $i+1);
+                $s1 = ltrim(substr($str, $i+1));
+                if(substr($s1, 0, 1)=='}'){
+                    $str = $s."\r\n".$s1;
+                }else{
+                    $str = $s."\r\n".indent($indentation-1).$s1;
+                }
+                return array($str,$i+1);
+            }
+        }
+        return array(null,null);
+    };
+
+    $str = trim($str);
+    $s_pos = 0;
+    for($i=0,$c=strlen($str);$i<$c;$i++){
+        if($str[$i]=='{'){
+            list($r,$l) = dealOne(substr($str, $i+1));
+            if($r===null){
+                return null;
+            }
+            $str = substr($str, 0, $i+1).$r;
+            $c=strlen($str);
+            $i += $l;
+        }elseif(substr($str, $i, 2)=='/*'){
+            $i = strpos($str, '*/', $i+2);
+        }
+    }
+    return $str;
 }

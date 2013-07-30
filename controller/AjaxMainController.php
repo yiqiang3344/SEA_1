@@ -24,4 +24,21 @@ class AjaxMainController extends Controller{
         $bind['ret'] = $ret;
         $this->render($bind);
     }
+
+    public function actionFormat(){
+        $type = $_POST['type'];
+        $source = $_POST['source'];
+
+        $ret = '';
+        if($type=='css'){
+            $ret = formatCss($source);
+        }
+        $ret === null and $ret = 'null';
+        $code = 1;
+        //end
+        $bind = array();
+        $bind['code'] = $code;
+        $bind['ret'] = $ret;
+        $this->render($bind);
+    }
 }
