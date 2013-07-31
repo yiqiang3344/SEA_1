@@ -218,7 +218,7 @@ function strToArr($str){
 }
 
 
-//暂时不能很好的处理不以;结尾的，注释的换行，以及样式{}与{}之间的换行
+//暂时不能很好的处理不以;结尾的 以及样式{}与{}之间的换行
 function formatCss($str){
     function indent($counts){
         return implode(array_pad(array(), 4*$counts, ' '),'');
