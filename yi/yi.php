@@ -20,39 +20,3 @@ set_exception_handler('YError::exceptionHandle');
 //预加载文件
 Yi::app()->setConfig();
 Yi::app()->autoload(Yi::app()->config['reloadDirs']);
-
-//路由设置
-/*
-	规则
-		控制器文件名必须小写+Controller结尾
-		控制器类名对应其文件名，但首字母必须大写
-		控制器方法名按驼峰式命名方法，可访问的方法加action前缀
-*/
-
-//路由
-if(!isset($_SERVER['PATH_INFO'])){
-	Yi::app()->gotoView();
-}
-
-$path = explode('/', strtolower($_SERVER['PATH_INFO']));//路径全小写处理
-
-if(isset($path[1]) && !empty($path[1])){//防止多余/时报错
-	if(!is_file($c = Yi::app()->rootDir.'/controller/'.$path[1].'Controller.php')){
-		Yi::app()->gotoView();
-	}
-	require($c);
-	$C_name = ucwords($path[1]).'Controller';
-	$C = new $C_name;//首字母大写
-}else{
-	Yi::app()->gotoView();
-}
-
-if(isset($path[2]) && !empty($path[2])){
-	$a = 'action'.ucwords($path[2]);//方法首字母都要大写
-	if(!method_exists($C,$a)){
-		Yi::app()->gotoView();
-	}
-	$C->$a();
-}else{
-	Yi::app()->gotoView('main/index');
-}

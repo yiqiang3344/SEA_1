@@ -1,4 +1,13 @@
 <?php
+function yDie($m){
+    if(APP_DEBUG){
+        throw new YException($m);
+    }else{
+        Yi::app()->gotoView();
+    }
+    die();
+}
+
 function setDbConfig(){
     define('SAE_MYSQL_HOST_M', 'localhost');
     define('SAE_MYSQL_PORT', '3306');
@@ -79,8 +88,7 @@ function sanitize($input) {
         if (get_magic_quotes_gpc()) {
             $input = stripslashes($input);
         }
-        $input  = cleanInput($input);
-        $output = mysql_escape_string($input);
+        $output  = cleanInput($input);
     }
     return $output;
 }
@@ -141,4 +149,167 @@ function FUE($hash,$times) {
 		$hash=hash("sha512", $hash);
 	}
 	return $hash;
+}
+
+//排除转义的符号
+function noEscapeStrPos($string,$find,$start){
+    if(($pos = strpos($string,$find,$start)) !== false  && substr($string, $pos-1,1)=='\\'){
+        $func = __METHOD__;
+        $pos = $func($string, $find, $pos+strlen($find));
+    }
+    return $pos;
+}
+
+function strToArr($str){
+    $pushByKey = function($str,$s_pos,$i,&$arr,&$key,$v=false){
+        $v = $v?$v:substr($str, $s_pos, $i-$s_pos);
+        if(is_string($v) && (strpos($v,'\'')===0 || strpos($v,'"')===0)){
+            $v = substr($v, 1, strlen($v)-2);
+        }
+        if($key){
+            if(strpos($key,'\'')===0 || strpos($key,'"')===0){
+                $key = substr($key, 1, strlen($key)-2);
+            }
+            $arr[$key] = $v;
+            $key = false;
+        }else{
+            $arr[] = $v;
+        }
+    };
+
+    $str = str_replace(array("\n","\r\n","\t"," "), '', $str);
+    $ass = 'array(';
+    if(strpos($str,$ass)!==0){
+        return array(null);//非数组则返回空值
+    }
+    $arr = array();
+    $key = false;
+    $s_pos = strlen($ass);
+    for($i=$s_pos,$c=strlen($str);$i<$c;$i++){
+        if($str[$i]=='"'){
+            if(($i=noEscapeStrPos($str,'"',$i+1)) === false){
+                break;
+            }
+        }elseif($str[$i]=='\''){
+            if(($i=noEscapeStrPos($str,'\'',$i+1)) === false){
+                break;
+            }
+        }elseif(substr($str, $i, 2)=='=>'){
+            $key = substr($str, $s_pos, $i-$s_pos);
+            $i += 1;
+            $s_pos = $i+1;
+        }elseif(substr($str, $i, 6)==$ass){
+            list($aa,$ii) = strToArr(substr($str, $i));
+            if($aa===null){
+                break;
+            }
+            $pushByKey($str,$s_pos,$i,$arr,$key,$aa);
+            $i += $ii;
+            $s_pos = $i+1;
+        }elseif($str[$i]==','){
+            $pushByKey($str,$s_pos,$i,$arr,$key);
+            $s_pos = $i+1;
+        }elseif($str[$i]==')'){
+            $pushByKey($str,$s_pos,$i,$arr,$key);
+            return array($arr,$i);
+        }
+    }
+    return array(null,null);
+}
+
+
+//暂时不能很好的处理不以;结尾的，注释的换行，以及样式{}与{}之间的换行
+function formatCss($str){
+    function indent($counts){
+        return implode(array_pad(array(), 4*$counts, ' '),'');
+    }
+
+    function dealNote(&$str,&$i,&$c,$s_blank='',$blank=''){
+        $endpos = strpos($str, '*/', $i+2)+1;
+        if(in_array($before=substr($str, $i-1,1),array(';','}'))){//所有; } 之后的注释都换行
+            $b = '';
+            if($s_blank!==null){
+                $b = substr($str, $i-1,1)=='}'?$s_blank:$blank;//缩进处理
+            }
+            $i = $endpos+1;
+            $s = substr($str, 0, $i);
+            $s1 = ltrim(substr($str, $i+1));
+            $str = $s."\r\n".$b.$s1;
+            $c=strlen($str);
+        }elseif(strpos($s2=ltrim(substr($str, $endpos+1),"\t \x0B\0"),"\r\n")===0 || strpos($s2,"\n")===0){//注释后面有换行则加缩进
+            $i = $endpos+1;
+            $s = substr($str, 0, $i);
+            $str = $s."\r\n".$blank.ltrim(substr($str, $i+1));
+        }else{//其他注释不处理
+            $i = $endpos+1;
+        }
+    }
+
+    function dealEndSign(&$str,&$i,&$c,$s_blank,$blank){
+        $s = substr($str, 0, $i+1);
+        $o_s1 = substr($str, $i+1);
+        $s1 = ltrim($o_s1);
+        if(substr($s1, 0, 1)=='}' && $str[$i]=='}'){
+            $str = $s."\r\n".$s1;
+        }elseif(substr($s1, 0, 1)=='}' && $str[$i]==';'){
+            $str = $s."\r\n".$s_blank.$s1;
+        }elseif(substr($s1, 0, 2)=='/*'){
+            if(($s2_before=substr($s2=ltrim($o_s1,"\t \x0B\0"), 0, 2))!='/*' && (strpos($s2,"\r\n")===0 || strpos($s2,"\n")===0)){
+                $str = $s."\r\n".($str[$i]==';'?$blank:$s_blank).ltrim($o_s1);
+            }else{
+                $str = $s.$s1;//紧接着注释则不换行
+            }
+        }elseif($str[$i]=='}'){
+            $str = $s."\r\n".$s_blank.$s1;
+        }elseif($str[$i]==';'){
+            $str = $s."\r\n".$blank.$s1;
+        }
+        $c=strlen($str);
+    }
+
+    function dealOne($str,$indentation=1){
+        $blank = indent($indentation);
+        $s_blank = indent($indentation-1);
+        $str = "\r\n".$blank.ltrim($str);
+        for($i=0,$c=strlen($str);$i<$c;$i++){
+            if($str[$i]=='{'){
+                $func = __METHOD__;
+                list($r,$l) = $func(substr($str,$i+1),$indentation+1);
+                if(!$r){
+                    break;
+                }
+                $str = substr($str, 0, $i+1).$r;
+                $c=strlen($str);
+                $i+=$l;
+            }elseif($str[$i]==':' || $str[$i]==','){
+                $str = substr($str, 0, $i+1).' '.ltrim(substr($str, $i+1));
+                $c=strlen($str);
+            }elseif(substr($str, $i, 2)=='/*'){
+                dealNote($str,$i,$c,$s_blank,$blank);
+            }elseif($str[$i]==';'){
+                dealEndSign($str,$i,$c,$s_blank,$blank);
+            }elseif($str[$i]=='}'){
+                dealEndSign($str,$i,$c,$s_blank,$blank);
+                return array($str,$i+1);
+            }
+        }
+        return array(null,null);
+    };
+
+    $str = trim($str);
+    $s_pos = 0;
+    for($i=0,$c=strlen($str);$i<$c;$i++){
+        if($str[$i]=='{'){
+            list($r,$l) = dealOne(substr($str, $i+1));
+            if($r===null){
+                return null;
+            }
+            $str = substr($str, 0, $i+1).$r;
+            $c=strlen($str);
+            $i += $l;
+        }elseif(substr($str, $i, 2)=='/*'){
+            dealNote($str,$i,$c);
+        }
+    }
+    return $str;
 }

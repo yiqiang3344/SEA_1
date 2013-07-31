@@ -1,10 +1,13 @@
 <?php
 return array(
 	'webName'=>'易框架',
-	'errorView'=>'main/main',
+	'errorView'=>'Main/Main',
+	'lang'=>'en',
+	'dealLangDocuments'=>array('js','tmpjs','view'),//不同语言需要处理路径的文件夹
 	'reloadDirs'=>array(
 		Yi::app()->rootDir.'/components',
 		Yi::app()->rootDir.'/model',
+		Yi::app()->rootDir.'/controller',
 		Yi::app()->rootDir.'/components/mustache',
 	),
 	'db'=>array(

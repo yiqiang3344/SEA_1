@@ -29,6 +29,22 @@ class MainController extends Controller{
         $this->render($view,$bind);   
     }
 
+    public function actionJstmp(){
+        $title = 'mustache test';
+        $list = array(1,2,3,4);
+        $params = array(
+            'title'=>$title,
+            'list'=>$list
+        );
+
+        $tmp_flag = Y::TEMPLATE_JS;
+        //end
+        $view = 'jstmp';
+        $bind = array();
+        $bind['params'] = $params;
+        $this->render($view,$bind,$tmp_flag);   
+    }
+
     // public function actionAddBlog(){
     //     MUser::addBlog();
     //     $info = '添加成功';
