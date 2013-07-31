@@ -2,6 +2,8 @@
 return array(
 	'webName'=>'易框架',
 	'errorView'=>'Main/Main',
+	'lang'=>'en',
+	'dealLangDocuments'=>array('js','tmpjs','view'),//不同语言需要处理路径的文件夹
 	'reloadDirs'=>array(
 		Yi::app()->rootDir.'/components',
 		Yi::app()->rootDir.'/model',

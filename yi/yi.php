@@ -20,27 +20,3 @@ set_exception_handler('YError::exceptionHandle');
 //预加载文件
 Yi::app()->setConfig();
 Yi::app()->autoload(Yi::app()->config['reloadDirs']);
-
-//路由
-if(!isset($_SERVER['PATH_INFO'])){
-	Yi::app()->gotoView();
-}
-
-$path = explode('/', $_SERVER['PATH_INFO']);
-
-if(isset($path[1]) && !empty($path[1])){//防止多余/时报错
-	$C_name = ucwords($path[1]).'Controller';
-	$C = new $C_name;//首字母大写
-}else{
-	Yi::app()->gotoView();
-}
-
-if(isset($path[2]) && !empty($path[2])){
-	$a = 'action'.ucwords($path[2]);//方法首字母都要大写
-	if(!method_exists($C,$a)){
-		Yi::app()->gotoView();
-	}
-	$C->$a();
-}else{
-	Yi::app()->gotoView();
-}

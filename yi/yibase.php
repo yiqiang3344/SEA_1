@@ -1,6 +1,9 @@
 <?php
 class Yi
 {
+	public $lang;
+	public $config;
+
 	private static $yi;
 	public static function app(){
 		if(!self::$yi){
@@ -9,24 +12,52 @@ class Yi
 		return self::$yi;
 	}
 
-	public function gotoView($url=null){
-		$url===null and $url = YConfig::get('main','errorView');
-		header('Location: '.Yi::app()->baseUri.'/'.$url); //默认访问
-		die;
-	}
+	public function run(){
+		//路由
+		if(!isset($_SERVER['PATH_INFO'])){
+			$this->gotoView();
+		}
 
-	public function autoload($dirs){
-		AutoLoader::register($dirs);
-	}
+		$path = explode('/', $_SERVER['PATH_INFO']);
 
-	public function getConfig($cfg,$key=false){
-		return YConfig::get($cfg,$key);
+		if(isset($path[1]) && !empty($path[1])){//防止多余/时报错
+			$C_name = ucwords($path[1]).'Controller';
+			$C = new $C_name;//首字母大写
+		}else{
+			$this->gotoView();
+		}
+
+		if(isset($path[2]) && !empty($path[2])){
+			$a = 'action'.ucwords($path[2]);//方法首字母都要大写
+			if(!method_exists($C,$a)){
+				$this->gotoView();
+			}
+			$C->$a();
+		}else{
+			$this->gotoView();
+		}
 	}
 
 	public function setConfig($uri='main'){
 		$cfg = $this->getConfig($uri);
 		$cfg['reloadDirs'][] = YROOT;
 		$this->config = $cfg;
+		$this->lang = $this->config['lang'];
+	}
+
+
+	public function autoload($dirs){
+		AutoLoader::register($dirs);
+	}
+
+	public function gotoView($url=null){
+		$url===null and $url = YConfig::get('main','errorView');
+		header('Location: '.$this->baseUri.'/'.$url); //默认访问
+		die;
+	}
+
+	public function getConfig($cfg,$key=false){
+		return YConfig::get($cfg,$key);
 	}
 
 	public function time($refresh = false,$add_time=0) {
@@ -46,17 +77,29 @@ class Yi
 	}
 
 	public function url($c,$a=null,$p=array()){
-		$ret = '';
 		if($a){
 			$ret = $this->baseUri.'/'.$c.'/'.$a.'?';
 			foreach($p as $k=>$v){
 				$ret .= urlencode ( $k ) . "=" . urlencode ( $v ) . "&";
 			}
 		}else{
-			$ret .= $c;
-			$md5 = @md5_file ($this->rootDir.'/'.$ret);
-			$ret = $this->baseUrl.'/'.$ret.($md5 ? '?v=' . substr ( $md5, 0, 8 ) : '');
+			$lang = '';
+			if(Yi::app()->lang!='dev' && in_array(substr($c, 0, strpos($c, '/')), Yi::app()->config['dealLangDocuments'])){
+				$lang = '/'.Yi::app()->lang;
+			}
+
+			$md5 = @md5_file ($this->fileDir($c));
+			$ret = $this->baseUrl.$lang.'/'.$c.($md5 ? '?v=' . substr ( $md5, 0, 8 ) : '');
 		}
+		return $ret;
+	}
+
+	public function fileDir($dir){
+		$lang = '';
+		if(Yi::app()->lang!='dev' && in_array(substr($dir, 0, strpos($dir, '/')), Yi::app()->config['dealLangDocuments'])){
+			$lang = '/'.Yi::app()->lang;
+		}
+		$ret = $this->rootDir.$lang.'/'.$dir;
 		return $ret;
 	}
 }
