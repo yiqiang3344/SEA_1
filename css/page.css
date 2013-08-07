@@ -19,7 +19,8 @@
 	text-transform: uppercase;
 	color: #222;
 	text-shadow: 0px 2px 3px #666;
-	background: url("../images/1.jpg") no-repeat;
+	background: url(../img/logo.jpg?v=40631e6d) no-repeat;
+	background: url(../img/logo.jpg?v=40631e6d) no-repeat;
 	background-size: 6%;
 	padding-left: 45px;
 	background-position: 0px 15px;
@@ -77,6 +78,9 @@
 	cursor: auto;
 	font-size: 2em;
 }
-.mblog .content{
+.mblog__content{
 	font-size: 1.2em;
+}
+.mblog__content p{
+	text-indent: 2em;
 }

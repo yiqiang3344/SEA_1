@@ -1,9 +1,0 @@
-<div>{{title}}<div>
-<div>
-	{{#list}}
-		<span>{{.}}</span>
-	{{/list}}
-	{{^list}}
-		<span>空</span>
-	{{/list}}
-<div>

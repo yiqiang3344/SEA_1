@@ -75,33 +75,6 @@ class Yi
 		}
 		return CUR_TIME;
 	}
-
-	public function url($c,$a=null,$p=array()){
-		if($a){
-			$ret = $this->baseUri.'/'.$c.'/'.$a.'?';
-			foreach($p as $k=>$v){
-				$ret .= urlencode ( $k ) . "=" . urlencode ( $v ) . "&";
-			}
-		}else{
-			$lang = '';
-			if(Yi::app()->lang!='dev' && in_array(substr($c, 0, strpos($c, '/')), Yi::app()->config['dealLangDocuments'])){
-				$lang = '/'.Yi::app()->lang;
-			}
-
-			$md5 = @md5_file ($this->fileDir($c));
-			$ret = $this->baseUrl.$lang.'/'.$c.($md5 ? '?v=' . substr ( $md5, 0, 8 ) : '');
-		}
-		return $ret;
-	}
-
-	public function fileDir($dir){
-		$lang = '';
-		if(Yi::app()->lang!='dev' && in_array(substr($dir, 0, strpos($dir, '/')), Yi::app()->config['dealLangDocuments'])){
-			$lang = '/'.Yi::app()->lang;
-		}
-		$ret = $this->rootDir.$lang.'/'.$dir;
-		return $ret;
-	}
 }
 
 class YException extends Exception
@@ -157,7 +130,7 @@ final class AutoLoader
 final class YConfig
 {
 	public static function get($config,$key=false){
-		$cfg = include(Yi::app()->rootDir.'/config/'.$config.'.cfg.php');
+		$cfg = include(Yi::app()->basePath.'/config/'.$config.'.cfg.php');
 		return $key?$cfg[$key]:$cfg;
 	}
 }
