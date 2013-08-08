@@ -31,7 +31,24 @@ class AjaxMainController extends Controller{
 
         $ret = '';
         if($type=='css'){
-            $ret = formatCss($source);
+            $ret = FormatCss::format($source);
+        }
+        $ret === null and $ret = 'null';
+        $code = 1;
+        //end
+        $bind = array();
+        $bind['code'] = $code;
+        $bind['ret'] = $ret;
+        $this->render($bind);
+    }
+
+    public function actionCompress(){
+        $type = $_POST['type'];
+        $source = $_POST['source'];
+
+        $ret = '';
+        if($type=='css'){
+            $ret = compressCss($source);
         }
         $ret === null and $ret = 'null';
         $code = 1;

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="build" basedir="../" default="reset">
+    <property file="build/build.properties" />
+
+    <target name="clear_config" description="clear config">
+        <copy todir="." overwrite="true">
+            <mapper type='identity' />
+            <fileset dir="build/tmp">
+                <include name="protected/includes/functions.inc.php" />
+            </fileset>
+        </copy>
+        <delete dir="build/tmp"/>
+    </target>
+    <target name="set_config" description="replace config">
+        <mkdir dir="build/tmp" />
+        <copy todir="build/tmp">
+            <mapper type='identity' />
+            <fileset dir=".">
+                <include name="protected/includes/functions.inc.php" />
+            </fileset>
+        </copy>
+        <reflexive>
+            <fileset dir=".">
+                <include name="protected/includes/functions.inc.php" />
+            </fileset>
+            <filterchain>
+                <replacetokens begintoken="@" endtoken="@">
+                    <token key="db.server" value="${db.server}" />
+                    <token key="db.port" value="${db.port}" />
+                    <token key="db.database" value="${db.database}" />
+                    <token key="db.user" value="${db.user}" />
+                    <token key="db.pwd" value="${db.pwd}" />
+                </replacetokens>
+            </filterchain>
+        </reflexive>
+    </target>
+    <target name="reset" description="exec reset.php" depends="set_config">
+        <exec dir="build" command="php reset.php" outputProperty="test.out"/>
+        <echo msg="message: ${test.out}" />
+    </target>
+</project>

@@ -17,13 +17,13 @@ class MainController extends Controller{
         $view = 'blog';
         $bind = array();
         $bind['info'] = $info;
-        $this->render($view,$bind);
+        $this->render($view,$bind,Y::TEMPLATE_JS);
     }
 
     public function actionTools(){
         //end
         $view = 'tools';
         $bind = array();
-        $this->render($view,$bind);   
+        $this->render($view,$bind,Y::TEMPLATE_JS);   
     }
 }

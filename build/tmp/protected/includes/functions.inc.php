@@ -9,11 +9,11 @@ function yDie($m){
 }
 
 function setDbConfig(){
-    define('SAE_MYSQL_HOST_M', 'localhost');
-    define('SAE_MYSQL_PORT', '3306');
-    define('SAE_MYSQL_DB', 'sae_1');
-    define('SAE_MYSQL_USER', 'root');
-    define('SAE_MYSQL_PASS', 'yjq');
+    define('SAE_MYSQL_HOST_M', '@db.server@');
+    define('SAE_MYSQL_PORT', '@db.port@');
+    define('SAE_MYSQL_DB', '@db.database@');
+    define('SAE_MYSQL_USER', '@db.user@');
+    define('SAE_MYSQL_PASS', '@db.pwd@');
 }
 
 function getTime($refresh = false) {
