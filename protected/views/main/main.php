@@ -6,7 +6,7 @@
 		var html = Mustache.to_html(template, params);
 		document.write(html);
 
-		$('.jsto_blog').click(function(){
+		bind_click($('.jsto_blog'),function(){
 			var id = $(this).parents('li').attr('id').replace('jsblog_','');
 			State.forward('Main','Blog',{id:id});
 		});

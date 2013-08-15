@@ -4,7 +4,7 @@
 * @author sidneyYi
 */
 define('YROOT',dirname(__FILE__));
-defined('YDEBUG') or define('YDEBUG',true);
+defined('YDEBUG') or define('YDEBUG',true);//是否显示yi框架的debug提示信息
 
 
 require_once(YROOT.'/yibase.php');

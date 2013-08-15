@@ -3,6 +3,7 @@ class Yi
 {
 	public $lang;
 	public $config;
+	public $data;//做全局存储变量
 
 	private static $yi;
 	public static function app(){
@@ -26,6 +27,7 @@ class Yi
 		}else{
 			$this->gotoView();
 		}
+
 
 		if(isset($path[2]) && !empty($path[2])){
 			$a = 'action'.ucwords($path[2]);//方法首字母都要大写
@@ -130,7 +132,12 @@ final class AutoLoader
 final class YConfig
 {
 	public static function get($config,$key=false){
-		$cfg = include(Yi::app()->basePath.'/config/'.$config.'.cfg.php');
+		if(isset(Yi::app()->data['configs'][$config])){
+			$cfg = Yi::app()->data['configs'][$config];
+		}else{
+			$cfg = include(Yi::app()->basePath.'/config/'.$config.'.cfg.php');
+			Yi::app()->data['configs'][$config] = $cfg;
+		}
 		return $key?$cfg[$key]:$cfg;
 	}
 }

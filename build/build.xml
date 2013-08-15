@@ -1,41 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="build" basedir="../" default="reset">
+<project name="build" basedir="../" default="go">
     <property file="build/build.properties" />
 
     <target name="clear_config" description="clear config">
         <copy todir="." overwrite="true">
             <mapper type='identity' />
             <fileset dir="build/tmp">
-                <include name="protected/includes/functions.inc.php" />
+                <patternset id="config_files">
+                    <include name="protected/config/main.cfg.php" />
+                </patternset>
             </fileset>
         </copy>
         <delete dir="build/tmp"/>
     </target>
-    <target name="set_config" description="replace config">
+
+    <target name="set_config" description="replace config" depends="clear_config">
         <mkdir dir="build/tmp" />
         <copy todir="build/tmp">
             <mapper type='identity' />
             <fileset dir=".">
-                <include name="protected/includes/functions.inc.php" />
+                <patternset refid="config_files"></patternset>
             </fileset>
         </copy>
         <reflexive>
             <fileset dir=".">
-                <include name="protected/includes/functions.inc.php" />
+                <patternset refid="config_files"></patternset>
             </fileset>
             <filterchain>
                 <replacetokens begintoken="@" endtoken="@">
-                    <token key="db.server" value="${db.server}" />
-                    <token key="db.port" value="${db.port}" />
-                    <token key="db.database" value="${db.database}" />
-                    <token key="db.user" value="${db.user}" />
-                    <token key="db.pwd" value="${db.pwd}" />
+                    <token key="app.name" value="${app.name}" />
+                    <token key="app.lang" value="${app.lang}" />
+                    <token key="mysql.host" value="${mysql.host}" />
+                    <token key="mysql.port" value="${mysql.port}" />
+                    <token key="mysql.db" value="${mysql.db}" />
+                    <token key="mysql.user" value="${mysql.user}" />
+                    <token key="mysql.pass" value="${mysql.pass}" />
+                    <token key="cache.host" value="${cache.host}" />
+                    <token key="cache.port" value="${cache.port}" />
                 </replacetokens>
             </filterchain>
         </reflexive>
     </target>
+
     <target name="reset" description="exec reset.php" depends="set_config">
-        <exec dir="build" command="php reset.php" outputProperty="test.out"/>
-        <echo msg="message: ${test.out}" />
+        <exec dir="build" command="php reset.php" outputProperty="msg.out"/>
+        <echo msg="message: ${msg.out}" />
+    </target>
+
+     <target name="compress" description="compress js and css" depends="reset">
+        <exec dir="build" command="php compress.php" outputProperty="msg.out"/>
+        <echo msg="message: ${msg.out}" />
+    </target>
+
+     <target name="go" description="start" depends="compress">
     </target>
 </project>

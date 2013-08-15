@@ -8,14 +8,6 @@ function yDie($m){
     die();
 }
 
-function setDbConfig(){
-    define('SAE_MYSQL_HOST_M', 'localhost');
-    define('SAE_MYSQL_PORT', '3306');
-    define('SAE_MYSQL_DB', 'sae_1');
-    define('SAE_MYSQL_USER', 'root');
-    define('SAE_MYSQL_PASS', 'yjq');
-}
-
 function getTime($refresh = false) {
 	$add_time = 24*60*60*0 + 60*60*0 + 60*0;
 	return Yi::app()->time($refresh,$add_time);
@@ -328,4 +320,77 @@ function compressCss($str){
     //两个以上的空格全部换成一个
     $str = preg_replace("/\\s+/u", ' ', $str);
     return $str;
+}
+
+function formatJs($str){
+    
+
+    
+    //删除所有换行
+    $str = preg_replace("{/\*[\s\S]*?\*/|\r\n}u", '', $str);
+    //两个以上的空格全部换成一个
+    $str = preg_replace("/\\s+/u", ' ', $str);
+    return $str;
+}
+
+function yscanDir($dir,$recursive=true){
+    $file_list = array();
+    foreach(scandir($dir) as $file){
+        if($file=="." || $file==".." || $file==".svn"){
+            continue;
+        }else if(is_file($dir."/".$file)){
+            $file_list[]=$dir."/".$file;
+        }else if($recursive && is_dir($dir."/".$file)){
+            $func = __FUNCTION__;
+            $file_list = array_merge($file_list,$func($dir."/".$file));
+        }else{
+            continue;
+        }
+    }       
+    return $file_list;
+}
+
+function mergePngs($path){
+    //切除多余空白，排序，首位相连，输出宽高
+    $list = array();
+    foreach(scandir($path) as $v){
+        if($v=='.' || $v=='..' || is_dir($v) || strrchr($v,'.')!='.png'){
+            continue;
+        }
+        $list[] = $path.'/'.$v;
+        $resource = imagecreatefrompng($path.'/'.$v);
+        $width = imagesx($resource);
+        $height = imagesy($resource);
+        isset($p_a) || $p_a = array($width,0,$height,0);
+        for($x = 0; $x<$width; $x++) {
+            for($y = 0; $y<$height; $y++) {
+                if(((imagecolorat($resource,$x,$y) & 0x7F000000) >> 24)!=127){
+                    $x<$p_a[0] && $p_a[0]=$x;
+                    $x>$p_a[1] && $p_a[1]=$x;
+                    $y<$p_a[2] && $p_a[2]=$y;
+                    $y>$p_a[3] && $p_a[3]=$y;
+                }
+            }
+        }
+    }
+    $w = $p_a[1]-$p_a[0]+1;
+    $h = $p_a[3]-$p_a[2]+1;
+    $count = count($list);
+
+    $croped=imagecreatetruecolor($w, $h*$count);
+    imagealphablending($croped, false);
+    imagesavealpha($croped, true);
+    imagefill($croped, 0, 0, imagecolorallocatealpha($croped,255,255,255,127));
+    //排序 合并
+    sort($list);
+    foreach($list as $k => $v){
+        $resource = imagecreatefrompng($v);
+        imagecopy($croped,$resource,0,$h*$k,$p_a[0],$p_a[2],$w,$h);
+    }
+    imagepng($croped, $path.'/merge.png');
+    imagedestroy($croped);
+
+    $hd = fopen($path.'/merge.txt', 'w');
+    fwrite($hd, 'width:'.$w."\r\n".'height:'.$h."\r\n".'count:'.$count);
+    fclose($hd);
 }

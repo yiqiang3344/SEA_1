@@ -39,6 +39,7 @@ class Controller{
         $content=ob_get_clean();
         require(Yi::app()->basePath.'/views'.$this->layout.'.php');
         unset($content);
+
     }
 
     public function url($c,$a=null,$p=array()){
@@ -55,8 +56,14 @@ class Controller{
             }
         }else{
             $lang = '';
-            if(!in_array($c, array('js/jquery.min.js','js/main.js','js/url.js')) && preg_match('{^js/|^template/}su', $c)){
+
+            if(preg_match('{^js/|^template/}', $c) && !preg_match('{^js/(jquery|main|url)\.}',$c)){
                 $c = Yi::app()->lang.'/'.$c;
+            }
+
+            //非开发中 自动判断是否有压缩过的文件
+            if(Yi::app()->lang!='dev' && preg_match('{^('.Yi::app()->lang.'/js'.'|js|css)/.*?[^\.min\.js$|^\.min\.css$]}', $c) && is_file(Yi::app()->rootDir.'/'.($n_c=str_replace(array('.js','.css'),array('.min.js','.min.css'),$c)))){
+                $c = $n_c;
             }
 
             $md5 = @md5_file (Yi::app()->rootDir.'/'.$c);

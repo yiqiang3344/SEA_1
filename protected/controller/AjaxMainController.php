@@ -49,6 +49,8 @@ class AjaxMainController extends Controller{
         $ret = '';
         if($type=='css'){
             $ret = compressCss($source);
+        }elseif($type=='js'){
+            $ret = JSMin::minify($source);
         }
         $ret === null and $ret = 'null';
         $code = 1;

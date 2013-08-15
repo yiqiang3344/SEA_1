@@ -31,6 +31,8 @@
 	</span>
 	<span><input id="format_css" type="button" value="css格式化"></span>
 	<span><input id="compress_css" type="button" value="css压缩"></span>
+	<span><input id="format_js" type="button" value="js格式化"></span>
+	<span><input id="compress_js" type="button" value="js压缩"></span>
 </div>
 <div id="output_html" class="dn">
 </div>

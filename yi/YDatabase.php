@@ -4,7 +4,7 @@ class YDatabase{
 	private static $dbah;
 	public static function setDb(){
 		if(!self::$dbh){
-			$dbCfg = YConfig::get('main','db');
+			$dbCfg = Yi::app()->config['db'];
 			$dbCfg['connectionString'] .= 'dbname='.$dbCfg['dbname'].';';
 			self::$dbh=YDatabaseAccess::create($dbCfg,true);
 			// self::$dbh->openCache(600);//开启memcache并设置缓存时间
@@ -15,7 +15,7 @@ class YDatabase{
 	}
 	public static function YGetDbah(){
 		if(!self::$dbah){
-			self::$dbah=YDatabaseAccess::create(YConfig::get('main','db'),true);
+			self::$dbah=YDatabaseAccess::create(Yi::app()->config['db'],true);
 		}
 		return self::$dbah;
 	}

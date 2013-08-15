@@ -79,8 +79,32 @@
 	font-size: 2em;
 }
 .mblog__content{
-	font-size: 1.2em;
+	font-size: 1.15em;
+	line-height: 1.5em;
 }
 .mblog__content p{
 	text-indent: 2em;
+	margin:5px 0;
+}
+
+.mpop{
+	font-size: 1.5em;
+	font-weight: normal;
+	position: absolute;
+	text-align: center;
+	width:100%;
+}
+
+.mpop__close{
+}
+
+.mpop__close:hover{
+}
+
+.mpop--normal{
+}
+
+
+.mdemo{
+	font-size: 1.5em;
 }
