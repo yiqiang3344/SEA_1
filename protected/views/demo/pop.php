@@ -6,7 +6,7 @@
 		var html = Mustache.to_html(template, params);
 		document.write(html);
 
-		bind_click($('#pop'),function(){
+		ybind('click',$('#pop'),function(){
 			var html = '';
 			html += '<div class="mpop--normal m0a mbs w200">';
 			html += '<div class="title ms">这里是标题</div>';

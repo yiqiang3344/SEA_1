@@ -1186,33 +1186,6 @@ function jsBeautify(js_source_text, options)
     }
 })();
 
-var EventUtil = {
-    addHandler: function(element, type, handler) {
-        if (element.addEventListener) element.addEventListener(type, handler, false);
-        else if (element.attachEvent) element.attachEvent("on" + type, handler);
-        else element["on" + type] = handler
-    },
-    removeHandler: function(element, type, handler) {
-        if (element.removeEventListener) element.removeEventListener(type, handler, false);
-        else if (element.datachEvent) element.datachEvent("on" + type, handler);
-        else element["on" + type] = null
-    },
-    getEvent: function(event) {
-        return event ? event : window.event
-    },
-    getTarget: function(event) {
-        return event.target || event.srcElement
-    },
-    preventDefault: function(event) {
-        if (event.preventDefault) event.preventDefault();
-        else event.returnValue = false
-    },
-    stopPropagation: function() {
-        if (event.stopPropagation) event.stopPropagation();
-        else event.cancelBubble = true
-    }
-};
-
 function yajax(c,a,data,succ_callback,dom){
     if(dom){
         var k_disable=0;
@@ -1304,7 +1277,7 @@ function getUrl(c,a,p){
             }
         }
     }else{
-        ret = BASEURI+'/'+c;
+        ret = BASEURL+'/'+c;
     }
     return ret;
 }

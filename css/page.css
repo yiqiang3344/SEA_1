@@ -108,3 +108,9 @@
 .mdemo{
 	font-size: 1.5em;
 }
+
+.demo_1_img{
+	height:151px;
+	width:279px;
+	background: url(../images/demo/demo3.png?v=021524c2);
+}

@@ -3,7 +3,7 @@ function m_print(){
 		var html = Mustache.to_html(template, params);
 		document.write(html);
 
-		bind_click($('.jsto_blog'),function(){
+		ybind('click',$('.jsto_blog'),function(){
 			var id = $(this).parents('li').attr('id').replace('jsblog_','');
 			State.forward('Main','Blog',{id:id});
 		});

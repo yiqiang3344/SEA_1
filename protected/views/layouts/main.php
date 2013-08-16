@@ -15,7 +15,7 @@
 		var BASEURL = <?=json_encode(Yi::app()->baseUrl)?>;
 		var BASEURI = <?=json_encode(Yi::app()->baseUri)?>;
 		$(function(){
-			bind_click($('.jsto_home'),function(){
+			ybind('click',$('.jsto_home'),function(){
 				State.forward('Main','Main');
 			});
 		});
