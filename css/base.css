@@ -19,6 +19,8 @@ body {
  }
 .pen{pointer-events: none;}
 .dn{display: none;}
+.pr{position: relative;}
+.pa{position: absolute;}
 .fh10 { font-size: 10px; line-height: 11px }
 .fh11 { font-size: 11px; line-height: 13px }
 .fh12 { font-size: 12px; line-height: 14px }

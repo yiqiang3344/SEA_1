@@ -8,7 +8,9 @@
 	<script src="<?=$this->url('js/jquery.js')?>" type="text/javascript"></script>
 	<script src="<?=$this->url('js/main.js')?>" type="text/javascript"></script>
 	<script src="<?=$this->url('js/helper.js')?>" type="text/javascript"></script>
+	<script src="<?=$this->url('widget/editor/kindeditor.js')?>" type="text/javascript"></script>
 	<script type="text/javascript">
+		var LANG = <?=json_encode(Yi::app()->lang)?>;
 		var APP_DEBUG = <?=json_encode(APP_DEBUG)?>;
 		var STIME = <?=getTime();?>;
 		var CTIME = new Date().getTime();

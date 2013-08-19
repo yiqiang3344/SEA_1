@@ -19,17 +19,18 @@
 		ybind('click',$('.js_anim'),function(){
 			var html = '';
 			html += '<div class="mpop--normal m0a mbs w300">';
-			html += '<div class="title ms">web app动画</div>';
-			html += '<div class="js_demo_1 w300 h150">';
-			html += '	<div class="js_demo_1_img demo_1_img"></div>';
-			html += '</div>';
+			html += '	<div class="title ms">web app动画</div>';
+			html += '	<div class="js_demo_1 pr"></div>';
 			html += '</div>';
 			html += '<div class="mpop__close m0a w50"><a>确定</a></div>';
 			var bind = function(){
-				$('.js_demo_1_img').remove();
-				draw_anim($('.js_demo_1'),getUrl('images/demo/demo3.png'),279,151,60).play(function(){$('.js_demo_1').append('<div class="js_demo_1_img demo_1_img"></div>')});
+				draw_anim($('.js_demo_1'),300,300,'anim_tank',60).play();
 			}
 			mpop(html,bind);
+		});
+
+		ybind('click',$('.js_editor'),function(){
+			State.forward('Demo','Editor');
 		});
 	}
 </script>

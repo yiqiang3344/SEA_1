@@ -23,7 +23,7 @@ if(file_exists($file.".dic")){
 	<style>
 .e{background-color:yellow;color:red}
 	</style>
-	<script type="text/javascript" src="jquery.min.js"></script>
+	<script type="text/javascript" src="../js/jquery.min.js"></script>
 	<script type="text/javascript">
 	var ret=<?=json_encode($ret)?>;	
 	

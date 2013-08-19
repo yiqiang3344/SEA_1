@@ -483,26 +483,32 @@ var unbind_click;
         })();
     })();
 
-function draw_anim(Dom,img,width,heigth,count,speed,zoom) {
+function draw_anim(Dom,width,height,cls,count,speed,zoom) {
     return new function() {
         speed = speed ? speed : 2000;
         zoom = zoom ? zoom : 0;
-        var scale_style = "-webkit-transform:scale("+(zoom+1)+");"
-        var dom = $('<div style="position:absolute;width:'+width+'px;height:'+heigth+'px;background-image:url('+img+');background-position: 0 0;-webkit-transform:scale('+(zoom+1)+');"></div>');
-        this.play = function(callback) {
+        var dom,frame_index;
+        this.set = function() {
+            Dom.css({width:width,height:height});
+            frame_index = 0;
+            typeof dom=='object' && dom.remove();
+            dom = $('<span class="'+cls+' '+cls+formatNum(frame_index,4)+'" style="-webkit-transform:scale('+(zoom+1)+');"></span>');
             dom.appendTo(Dom);
+            return this;
+        }
+        this.play = function(callback) {
+            this.set();
             var last_time = 0;
-            var frame_index=0;
             setTimeout(run,0);
             function run(){
                 var now=new Date().getTime();
                 if(now-last_time > speed/count){
                     if(frame_index==count){
-                        dom.remove();
                         callback();
                         return;
                     }
-                    dom.css('background-position',' 0 -'+frame_index*heigth+'px');
+                    dom.removeClass(cls+formatNum(frame_index-1,4));
+                    dom.addClass(cls+formatNum(frame_index,4));
                     frame_index++;
                     last_time=now;
                 }
@@ -510,4 +516,23 @@ function draw_anim(Dom,img,width,heigth,count,speed,zoom) {
             }
         }
     }
+}
+
+
+function formatNum(num,f){
+    var c=f-num.toString().length;
+    for(var i=0;i<c;i++){
+        num = '0'+num;
+    }
+    return num;
+}
+
+function dealLang(lang){
+    if(lang=='dev'){
+        lang='zh_cn';
+    }
+    if(/^zh_/.test(lang)){
+        lang = lang.replace(/^zh_(.*)/, 'zh_'+lang.match(/^zh_(.*)/)[1].toUpperCase()); 
+    }
+    return lang;
 }

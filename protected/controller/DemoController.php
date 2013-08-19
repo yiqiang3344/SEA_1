@@ -24,4 +24,11 @@ class DemoController extends Controller {
  //        $bind['list'] = $list;
  //        $this->render($view,$bind,Y::TEMPLATE_JS);
  //    }
+
+    public function actionEditor(){
+        //end
+        $view = 'editor';
+        $bind = array();
+        $this->render($view,$bind,Y::TEMPLATE_JS);   
+    }
 }
