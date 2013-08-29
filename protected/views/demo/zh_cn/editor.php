@@ -1,8 +1,5 @@
-<script type='text/javascript' src='<?=$this->url("js/demo/editor.js")?>'></script>
+<script type="text/javascript" src="<?=$this->url("js/demo/editor.js")?>"></script>
 <script type="text/javascript">
-	//model
-	var params = {};
-
-	//view
-	m_print();
+	page_params = <?=json_encode($params)?>;
+	maindiv.page_print();
 </script>

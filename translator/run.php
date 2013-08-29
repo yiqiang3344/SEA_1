@@ -1,5 +1,5 @@
 <?php
-isset($lang_list) || $lang_list = array('zh_cn');
+isset($lang_list) || $lang_list = explode(',', file_get_contents('../build/lang_config.txt'));
 
 require_once "init.php";
 $dic=new Dic(DIC);

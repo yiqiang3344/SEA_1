@@ -42,16 +42,26 @@
         </reflexive>
     </target>
 
-    <target name="reset" description="exec reset.php" depends="set_config">
-        <exec dir="build" command="php reset.php" outputProperty="msg.out"/>
+    <target name="translate" description="translate" depends="set_config">
+        <exec dir="protected" command="php ../build/translate.php" outputProperty="msg.out"/>
         <echo msg="message: ${msg.out}" />
     </target>
 
-     <target name="compress" description="compress js and css" depends="reset">
-        <exec dir="build" command="php compress.php" outputProperty="msg.out"/>
+     <target name="generateJsFiles" description="generate js files" depends="translate">
+        <exec dir="protected" command="node ../build/generateJsFiles.js" outputProperty="msg.out"/>
         <echo msg="message: ${msg.out}" />
     </target>
 
-     <target name="go" description="start" depends="compress">
+     <target name="compressJsCss" description="compress js and css" depends="generateJsFiles">
+        <exec dir="protected" command="php ../build/compressJsCss.php" outputProperty="msg.out"/>
+        <echo msg="message: ${msg.out}" />
+    </target>
+
+    <target name="setCacheCode" description="set cache code" depends="compressJsCss">
+        <exec dir="protected" command="php ../build/setCacheCode.php" outputProperty="msg.out"/>
+        <echo msg="message: ${msg.out}" />
+    </target>
+
+    <target name="go" description="start" depends="setCacheCode">
     </target>
 </project>

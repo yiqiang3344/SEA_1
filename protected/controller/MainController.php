@@ -2,35 +2,30 @@
 class MainController extends Controller{
 
     public function actionMain(){
-        $list = MUser::getBlogList();
+        $list = MBlog::getBlogList();
+        foreach($list as &$v){
+            preg_match('|<p>[\s*&nbsp;]*(.*?)</p>|sS', $v['content'], $match);
+            if($match){
+                $v['content'] = $match[1];
+            }
+        }
         //end
         $view = 'main';
         $bind = array();
-        $bind['list'] = $list;
-        $this->render($view,$bind,Y::TEMPLATE_JS);
-    }
-
-    public function actionBlog(){
-        $id = $_GET['id'];
-        $info = MUser::getBlog($id);
-        //end
-        $view = 'blog';
-        $bind = array();
-        $bind['info'] = $info;
-        $this->render($view,$bind,Y::TEMPLATE_JS);
+        $bind['params'] = array(
+            'list'=>$list
+        );
+        $view = func_num_args()>0 && func_get_args(0) ? Y::GET_BIND : $view;
+        return $this->render($view,$bind,Y::TEMPLATE_JS);
     }
 
     public function actionTools(){
         //end
         $view = 'tools';
         $bind = array();
-        $this->render($view,$bind,Y::TEMPLATE_JS);   
-    }
-
-    public function actionEditor(){
-        //end
-        $view = 'editor';
-        $bind = array();
-        $this->render($view,$bind,Y::TEMPLATE_JS);   
+        $bind['params'] = array(
+        );
+        $view = func_num_args()>0 && func_get_args(0) ? Y::GET_BIND : $view;
+        return $this->render($view,$bind,Y::TEMPLATE_JS);
     }
 }

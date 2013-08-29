@@ -4,6 +4,7 @@ class Controller{
     public $pageTitle;
     public $template;
     public $bind;
+    public $user;
 
     public function __construct(){
         $this->pageTitle = Yi::app()->config['webName'];
@@ -11,19 +12,47 @@ class Controller{
     }
 
     public function init(){
+        isset($_SESSION['user']) && $this->user = $_SESSION['user'];
         YDatabase::setDb();
     }
-
 
     public function getControllerName(){
 		$arr = explode('Controller',get_class($this));
 		return strtolower($arr[0]);
 	}
 
+    public function getPageData($page,$params){
+        list($c,$a) = explode('/', $page);
+        $c_name = ucwords($c).'Controller';
+        $action = 'action'.ucwords($a);
+        $controller = new $c_name;
+        $ret = false;
+        if(method_exists($controller,$action)){
+            $g = $_GET;
+            foreach($params as $k=>$v){
+                $_GET[$k] = $v;
+            }
+            $ret = $controller->$action(true);
+            $_GET = $g;
+        }
+        return $ret;
+    }
+
+    public function getJsFile($page){
+        return file_get_contents(Yi::app()->rootDir.'/'.Yi::app()->lang.'/js/'.strtolower($page).'.js');
+    }
+
     public function render($view,$bind=array(),$template_flag=false){
+        //检查是否有事物未处理
+        if(getDbh()->checkTransaction()){
+            yDie('Transaction no deal.');
+        }
+
         if(is_array($view)){
             echo json_encode($view);
-            return;
+            return true;
+        }elseif($view==Y::GET_BIND){
+            return $bind;
         }
 
         if($template_flag==Y::TEMPLATE_PHP || ($template_flag==Y::TEMPLATE_JS && Yi::app()->lang=='dev')){
@@ -40,10 +69,11 @@ class Controller{
         require(Yi::app()->basePath.'/views'.$this->layout.'.php');
         unset($content);
 
+        return true;
     }
 
     public function url($c,$a=null,$p=array()){
-        if($a){
+        if($a!==null){
             if(is_array($a)){
                 $ret = Yi::app()->baseUri.'/'.$c.'?';
                 $params = $a;
@@ -57,7 +87,7 @@ class Controller{
         }else{
             $lang = '';
 
-            if(preg_match('{^js/|^template/}', $c) && !preg_match('{^js/(jquery|main|url)\.}',$c)){
+            if(preg_match('{^js/|^template/}', $c) && !preg_match('{^js/(jquery|main|url|shCore)\.}',$c)){
                 $c = Yi::app()->lang.'/'.$c;
             }
 
@@ -70,5 +100,16 @@ class Controller{
             $ret = Yi::app()->baseUrl.'/'.$c.($md5 ? '?v=' . substr ( $md5, 0, 8 ) : '');
         }
         return $ret;
+    }
+
+    public function getUserData(){
+        return $this->user;
+    }
+
+    public function getUser(){
+        if(!$this->user){
+            yDie('didnt login!');
+        }
+        return $this->user;
     }
 }

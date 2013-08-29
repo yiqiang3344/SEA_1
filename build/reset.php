@@ -1,14 +1,12 @@
 <?php
-define("ALL_STEP", 3);
-$lang_list = array('zh_cn');
-
+$lang_list = explode(',', file_get_contents('language.properties'));
 // 翻译哦
 chdir("../translator");
 require_once 'run.php';
 
 step2();
 
-echo "step 2 of " . ALL_STEP . " : patch md5, generate url.js success\n";
+echo "patch md5, generate url.js success\n";
 
 chdir("../protected");
 foreach(scandir("views") as $file){
@@ -128,7 +126,7 @@ function step3_doOne($dir){//提取js文件
 						file_put_contents("views/$dir/$lang/$file",$content);
 						@mkdir("../$lang/js/$dir");
 						file_put_contents("../$lang/js/$dir/{$m[1]}.js",$js);
-					}		
+					}
 				}				
 			}			
 		}

@@ -1,6 +1,37 @@
 <?php
 class AjaxMainController extends Controller{
 
+    public function actionLogout(){
+        $m_user = $this->getUser();
+        $this->user = null;
+        $_SESSION['user'] = null;
+        $code = 1;
+        //end
+        $bind = array();
+        $bind['code'] = $code;
+        $this->render($bind);
+    }
+
+    public function actionLogin(){
+        $pwd = $_POST['pwd'];
+
+        $code = 2;
+        $user = null;
+        if($pwd=='qiangqiang'){
+            $_SESSION['user'] = array(
+                'useranme' => 'sidney'
+            );
+            $this->user = $_SESSION['user'];
+            $user = $this->getUserData();
+            $code = 1;
+        }
+        //end
+        $bind = array();
+        $bind['code'] = $code;
+        $bind['user'] = $user;
+        $this->render($bind);
+    }
+
     public function actionEncrypt(){
         $type = $_POST['type'];
         $source = $_POST['source'];

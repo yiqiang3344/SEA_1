@@ -4,9 +4,11 @@ define("DIC","dictionary.txt");
 $input=array(
 	array("../protected/views/main","./{lang}"),
 	array("../protected/views/demo","./{lang}"),
+	array("../protected/views/blog","./{lang}"),
 	array("../dev/js","../../{lang}/js"),
 	array("../dev/template/main","../../../{lang}/template/main"),
 	array("../dev/template/demo","../../../{lang}/template/demo"),
+	array("../dev/template/blog","../../../{lang}/template/blog"),
 	
 );
 

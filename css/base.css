@@ -19,17 +19,17 @@ body {
  }
 .pen{pointer-events: none;}
 .dn{display: none;}
+.dib{display: inline-block;}
 .pr{position: relative;}
 .pa{position: absolute;}
-.fh10 { font-size: 10px; line-height: 11px }
-.fh11 { font-size: 11px; line-height: 13px }
-.fh12 { font-size: 12px; line-height: 14px }
-.fh13 { font-size: 13px; line-height: 15px }
-.fh14 { font-size: 14px; line-height: 16px }
-.fh15 { font-size: 15px; line-height: 17px }
-.fh16 { font-size: 16px; line-height: 18px }
-.fh18 { font-size: 18px; line-height: 21px }
-.fh20 { font-size: 20px; line-height: 23px }
+.clel{clear: left;}
+.cler{clear: right;}
+.cleb{clear: both;}
+.fl{float: left;}
+.fr{float: right;}
+.fhs { font-size: 1em; line-height: 1em }
+.fhm { font-size: 2em; line-height: 2em }
+.fhh { font-size: 3em; line-height: 3em }
 .m0a { margin:0 auto; }
 .msa { margin:10px auto;}
 .mma { margin:20px auto;}
@@ -72,6 +72,7 @@ body {
 .w200{width:200px;}
 .w100{width:100px;}
 .w50{width:100px;}
+.h580{height:580px;}
 .h500{height:500px;}
 .h300{height:300px;}
 .h200{height:200px;}

@@ -32,7 +32,7 @@ final class YDatabaseAccess{
 		return new self($connection);
 	}
 	public function execute($sql,$params=array()){
-		if(YDEBUG && !$this->transaction){
+		if(YDEBUG && !$this->checkTransaction()){
 			YDie();
 		}
 		return 	$this->connection->createCommand($sql)->execute($params);
@@ -53,25 +53,25 @@ final class YDatabaseAccess{
 		return $this->connection->getLastInsertID();
 	}	
 	public function begin(){
-		if($this->transaction){
+		if($this->checkTransaction()){
 			YDie();
 		}
 		$this->transaction=$this->connection->beginTransaction();
 		return true;
 	}
 	public function commit(){
-		if(!$this->transaction){
+		if(!$this->checkTransaction()){
 			YDie();
 		}
-		$this->transaction->commit();
+		$this->connection->getPdoInstance()->commit();
 		$this->transaction=null;
 		return true;
 	}
 	public function rollback(){
-		if(!$this->transaction){
+		if(!$this->checkTransaction()){
 			YDie();
 		}
-		$this->transaction->rollBack();
+		$this->connection->getPdoInstance()->rollBack();
 		$this->transaction=null;
 		return true;
 	}
@@ -239,7 +239,7 @@ final class YDbConnection
 	public function beginTransaction()
 	{
 		$this->setActive(true);
-		return $this->_pdo->beginTransaction();
+		return	$this->_pdo->beginTransaction();
 	}
 	public function getLastInsertID($sequenceName='')
 	{

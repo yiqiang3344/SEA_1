@@ -5,30 +5,19 @@ class DemoController extends Controller {
         //end
         $view = 'main';
         $bind = array();
-        $this->render($view,$bind,Y::TEMPLATE_JS);
+        $bind['params'] = array(
+        );
+        $view = func_num_args()>0 && func_get_args(0) ? Y::GET_BIND : $view;
+        return $this->render($view,$bind,Y::TEMPLATE_JS);
     }
-
-
-    public function actionPop(){
-        //end
-        $view = 'pop';
-        $bind = array();
-        $this->render($view,$bind,Y::TEMPLATE_JS);
-    }
-
-	// public function actionScrollx(){
- //        $list = MUser::getBlogList();
- //        //end
- //        $view = 'main';
- //        $bind = array();
- //        $bind['list'] = $list;
- //        $this->render($view,$bind,Y::TEMPLATE_JS);
- //    }
 
     public function actionEditor(){
         //end
         $view = 'editor';
         $bind = array();
-        $this->render($view,$bind,Y::TEMPLATE_JS);   
+        $bind['params'] = array(
+        );
+        $view = func_num_args()>0 && func_get_args(0) ? Y::GET_BIND : $view;
+        return $this->render($view,$bind,Y::TEMPLATE_JS); 
     }
 }

@@ -1,11 +1,10 @@
 <script type="text/javascript">//template
-	var template = <?=json_encode($this->template)?>;//指定模板数据来源,开发的之后直接php赋值,发布时将其替换为外链
+	template = Hogan.compile(<?=json_encode($this->template)?>);
 </script>
 <script type="text/javascript">//static
-	function m_print(){
-		var html = Mustache.to_html(template, {});
-		document.write(html);
-
+	page_controller = function(p){
+	}
+	page_bind = function(){
 		var	source = $('#source');
 		var	output = $('#output');
 		var	output_html = $('#output_html');
@@ -111,6 +110,7 @@
 		});
 	}
 </script>
-<script type="text/javascript">
-	m_print();
+<script type="text/javascript">//print
+	page_params = <?=json_encode($params)?>;
+	maindiv.page_print();
 </script>

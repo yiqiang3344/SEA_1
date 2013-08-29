@@ -1,5 +1,5 @@
 <?php
-function yDie($m){
+function yDie($m=''){
     if(APP_DEBUG){
         throw new YException($m);
     }else{
@@ -315,17 +315,6 @@ final class FormatCss{
 }
 
 function compressCss($str){
-    //删除所有换行
-    $str = preg_replace("{/\*[\s\S]*?\*/|\r\n}u", '', $str);
-    //两个以上的空格全部换成一个
-    $str = preg_replace("/\\s+/u", ' ', $str);
-    return $str;
-}
-
-function formatJs($str){
-    
-
-    
     //删除所有换行
     $str = preg_replace("{/\*[\s\S]*?\*/|\r\n}u", '', $str);
     //两个以上的空格全部换成一个
